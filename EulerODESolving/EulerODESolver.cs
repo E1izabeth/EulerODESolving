@@ -14,9 +14,16 @@ namespace EulerODESolving
 {
     public partial class EulerODESolver : Form
     {
+        private Func<double, double, double>[] equations;
         public CubicSpline Spl { get; private set; }
         public EulerODESolver()
         {
+            equations = new Func<double, double, double>[3];
+            equations[0] = (x, y) => x * x - 2 * y;
+            equations[1] = (x, y) => 2 * x * y / (1 + x * x) + 1 + x * x;
+            equations[2] = (x, y) => y * Math.Sin(y) - x * x * Math.Cos(x);
+
+            
             this.Spl = new CubicSpline();
             InitializeComponent();
         }
@@ -42,35 +49,19 @@ namespace EulerODESolving
             }
         }
 
-        private void GetInterpolatedPlot(Chart chart, double[] x, Func<double, double> func)
+        private void GetInterpolatedPlot(Chart chart, double x0, double y0, double xn, double accuracy, int equationNumber)
         {
-            double[] y = new double[x.Length];
-
-            for (int i = 0; i < x.Length; i++)
-            {
-                y[i] = func(x[i]);
-            }
+            EulerSolver.Solve(equations[equationNumber], x0, y0, xn, accuracy, out double[] x, out double[] y);
 
             this.Spl.FitParametric(x, y, 1000, out double[] xs, out double[] ys);
-
-            double[] xO = new double[x.Length * 10];
-            double[] yO = new double[x.Length * 10];
-            var step = Math.Abs(x[0] - x[x.Length - 1]) / x.Length / 10;
-            for (int i = 0; i < x.Length * 10; i++)
-            {
-                xO[i] = x[0] + step * i;
-                yO[i] = func(xO[i]);
-            }
-
-
-            // Plot
-            string path = @"..\..\spline.png";
-            PlotEulerSolution(chart, "Euler ODE Solving", xs, ys, xO, yO, path);
+            
+            //Plot
+            PlotEulerSolution(chart, "Euler ODE Solving", xs, ys);
         }
 
         #region PlotSplineSolution
 
-        private static Chart PlotEulerSolution(Chart chart, string title, double[] xs, double[] ys, double[] xO, double[] yO, string path)
+        private static Chart PlotEulerSolution(Chart chart, string title, double[] xs, double[] ys)
         {
             chart.Titles.Add(title);
             chart.Legends.Add(new Legend("Legend"));
@@ -82,12 +73,7 @@ namespace EulerODESolving
             chart.ChartAreas[0].AxisY.MajorGrid.Enabled = false;
             chart.ChartAreas[0].AxisX.Crossing = 0;
             chart.ChartAreas[0].AxisY.Crossing = 0;
-
             Series s1 = CreateSeries(chart, "EulerSolve", CreateDataPoints(xs, ys), SeriesChartType.Line, Color.Blue, MarkerStyle.None);
-            Series s2 = CreateSeries(chart, "Original", CreateDataPoints(xO, yO), SeriesChartType.Line, Color.Red, MarkerStyle.None);
-
-
-            chart.Series.Add(s2);
             chart.Series.Add(s1);
 
             ca.RecalculateAxesScale();
@@ -133,6 +119,41 @@ namespace EulerODESolving
             return s;
         }
 
+        private bool isParamsCorrect(ref double  x0, ref double y0, ref double xn, ref double accuracy)
+        {
+            if (x0_textBox.Text == "" || !Double.TryParse(x0_textBox.Text, out x0))
+            {
+                error_label.Text = "Invalid Xo";
+                return false;
+            }
+            else if (y0_textBox.Text == "" || !Double.TryParse(y0_textBox.Text, out y0))
+            {
+                error_label.Text = "Invalid Yo";
+                return false;
+            }
+            else if (end_textBox.Text == "" || !Double.TryParse(end_textBox.Text, out xn))
+            {
+                error_label.Text = "Invalid Xn";
+                return false;
+            }
+            else if (x0 >= xn)
+            {
+                error_label.Text = "Xo should be less than Xn!";
+                return false;
+            }
+            else if (accuracy_textBox.Text == "" || !Double.TryParse(accuracy_textBox.Text, out accuracy))
+            {
+                error_label.Text = "Invalid accuracy value";
+                return false;
+            }
+            else if (accuracy >= 3)
+            {
+                error_label.Text = "Too large accuracy";
+                return false;
+            }
+            return true;
+        }
+
         #endregion
 
         private void compute_button_Click(object sender, EventArgs e)
@@ -141,29 +162,20 @@ namespace EulerODESolving
             chart1.ChartAreas.Clear();
             chart1.Series.Clear();
             chart1.Titles.Clear();
-            label3.Text = "";
-            label4.Text = "";
-            switch (listBox1.SelectedIndex)
+            error_label.Text = "";
+            double x0 = -10, y0 = 1, xn = 10, accuracy = 0.01;
+            if(sender is null && e is null)
             {
-                case 0:
-                    this.GetInterpolatedPlot(chart1, new double[] { 0, 2, 4, 7 }, Math.Sin);
-                    break;
-                case 1:
-                    break;
-                case 2:
-                    break;
-                case 3:
-                    break;
-                case 4:
-                    break;
-                case 5:
-                    break;
-                case 6:
-                    break;
-                default:
-                    break;
+                x0_textBox.Text = "-10";
+                y0_textBox.Text = "1";
+                end_textBox.Text = "10";
+                accuracy_textBox.Text = "0,1";
+            }
+            
+            if (this.isParamsCorrect(ref x0, ref y0, ref xn, ref accuracy))
+            {
+                this.GetInterpolatedPlot(chart1, x0, y0, xn, accuracy, listBox1.SelectedIndex);
             }
         }
-        
     }
 }

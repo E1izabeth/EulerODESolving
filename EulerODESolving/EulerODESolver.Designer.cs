@@ -76,8 +76,8 @@
             this.listBox1.HorizontalScrollbar = true;
             this.listBox1.Items.AddRange(new object[] {
             "y\' - x^2 + 2y = 0",
-            "y\' - y * sin(x) / 6 = 0",
-            "y\' - y * e^(-x) = 0"});
+            "y\' - 2 * x * y / (1 + x * x) - 1 - x * x",
+            "y\' -  y * sin(y) + x * x * cos(x)"});
             this.listBox1.Location = new System.Drawing.Point(629, 12);
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(193, 251);
@@ -88,14 +88,14 @@
             this.label3.Location = new System.Drawing.Point(0, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(100, 23);
-            this.label3.TabIndex = 18;
+            this.label3.TabIndex = 21;
             // 
             // label4
             // 
             this.label4.Location = new System.Drawing.Point(0, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(100, 23);
-            this.label4.TabIndex = 17;
+            this.label4.TabIndex = 20;
             // 
             // Xo_label
             // 
@@ -202,7 +202,7 @@
             this.Cursor = System.Windows.Forms.Cursors.Default;
             this.MinimumSize = new System.Drawing.Size(850, 500);
             this.Name = "EulerODESolver";
-            this.Text = "CubicSplinesInterpolation";
+            this.Text = "EulerODESolver";
             this.Load += new System.EventHandler(this.CubicSplinesInterpolation_Load);
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             this.ResumeLayout(false);
