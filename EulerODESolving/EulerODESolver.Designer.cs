@@ -76,29 +76,15 @@
             this.listBox1.HorizontalScrollbar = true;
             this.listBox1.Items.AddRange(new object[] {
             "y\' - x^2 + 2y = 0",
-            "y\' - 2 * x * y / (1 + x * x) - 1 - x * x",
+            "y\' - y * sin(x) / 6",
             "y\' -  y * sin(y) + x * x * cos(x)"});
             this.listBox1.Location = new System.Drawing.Point(629, 12);
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(193, 251);
             this.listBox1.TabIndex = 2;
-            // 
-            // label3
-            // 
-            this.label3.Location = new System.Drawing.Point(0, 0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(100, 23);
-            this.label3.TabIndex = 21;
-            // 
-            // label4
-            // 
-            this.label4.Location = new System.Drawing.Point(0, 0);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(100, 23);
-            this.label4.TabIndex = 20;
-            // 
             // Xo_label
             // 
+            this.Xo_label.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.Xo_label.AutoSize = true;
             this.Xo_label.Location = new System.Drawing.Point(629, 288);
             this.Xo_label.Name = "Xo_label";
@@ -108,6 +94,7 @@
             // 
             // Yo_label
             // 
+            this.Yo_label.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.Yo_label.AutoSize = true;
             this.Yo_label.Location = new System.Drawing.Point(630, 314);
             this.Yo_label.Name = "Yo_label";
@@ -117,6 +104,7 @@
             // 
             // end_label
             // 
+            this.end_label.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.end_label.AutoSize = true;
             this.end_label.Location = new System.Drawing.Point(629, 340);
             this.end_label.Name = "end_label";
@@ -126,6 +114,7 @@
             // 
             // accuracy_label
             // 
+            this.accuracy_label.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.accuracy_label.AutoSize = true;
             this.accuracy_label.Location = new System.Drawing.Point(629, 366);
             this.accuracy_label.Name = "accuracy_label";
@@ -135,6 +124,7 @@
             // 
             // x0_textBox
             // 
+            this.x0_textBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.x0_textBox.Location = new System.Drawing.Point(722, 285);
             this.x0_textBox.Name = "x0_textBox";
             this.x0_textBox.Size = new System.Drawing.Size(100, 20);
@@ -142,6 +132,7 @@
             // 
             // y0_textBox
             // 
+            this.y0_textBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.y0_textBox.Location = new System.Drawing.Point(722, 311);
             this.y0_textBox.Name = "y0_textBox";
             this.y0_textBox.Size = new System.Drawing.Size(100, 20);
@@ -149,6 +140,7 @@
             // 
             // end_textBox
             // 
+            this.end_textBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.end_textBox.Location = new System.Drawing.Point(722, 337);
             this.end_textBox.Name = "end_textBox";
             this.end_textBox.Size = new System.Drawing.Size(100, 20);
@@ -156,6 +148,7 @@
             // 
             // accuracy_textBox
             // 
+            this.accuracy_textBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.accuracy_textBox.Location = new System.Drawing.Point(722, 363);
             this.accuracy_textBox.Name = "accuracy_textBox";
             this.accuracy_textBox.Size = new System.Drawing.Size(100, 20);
@@ -174,6 +167,7 @@
             // 
             // error_label
             // 
+            this.end_label.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.error_label.AutoSize = true;
             this.error_label.Location = new System.Drawing.Point(630, 394);
             this.error_label.Name = "error_label";

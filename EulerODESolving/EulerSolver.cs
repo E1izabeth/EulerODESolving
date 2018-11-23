@@ -10,7 +10,7 @@ namespace EulerODESolving
     {
         internal static void Solve(Func<double, double, double> func, double x0, double y0, double xn, double accuracy, out double[] x, out double[] y)
         {
-            var h = 0.01;
+            var h = 0.1;
             var n = (int)Math.Round((xn - x0) / h);
             x = new double[n];
             y = new double[n];

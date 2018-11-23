@@ -14,16 +14,35 @@ namespace EulerODESolving
 {
     public partial class EulerODESolver : Form
     {
-        private Func<double, double, double>[] equations;
+        private EquationData[] _equations;
         public CubicSpline Spl { get; private set; }
         public EulerODESolver()
         {
-            equations = new Func<double, double, double>[3];
-            equations[0] = (x, y) => x * x - 2 * y;
-            equations[1] = (x, y) => 2 * x * y / (1 + x * x) + 1 + x * x;
-            equations[2] = (x, y) => y * Math.Sin(y) - x * x * Math.Cos(x);
-
-            
+            _equations = new EquationData[3];
+            _equations[0] = new EquationData(
+                (x, y) => x * x - 2 * y,
+                (x0, y0) => x =>
+                {
+                    double c = Math.Exp(2 * x0) * (y0 - 0.5 * x0 * x0 + 0.5 * x0 - 0.25);
+                    return c * Math.Exp(-2 * x) + 0.5 * x * x - 0.5 * x + 0.25;
+                }
+            );
+            _equations[1] = new EquationData(
+                (x, y) => y * Math.Sin(x) / 6,
+                (x0, y0) => x =>
+                {
+                    double c = y0 * Math.Exp(Math.Cos(x0) / 6);
+                    return c * Math.Exp(-Math.Cos(x) / 6);
+                }
+            );
+            _equations[2] = new EquationData(
+                (x, y) => y * Math.Exp(-x),
+                (x0, y0) => x =>
+                {
+                    double c = y0 * Math.Exp(Math.Exp(-x0));
+                    return c * Math.Exp(-Math.Exp(-x));
+                }
+            );
             this.Spl = new CubicSpline();
             InitializeComponent();
         }
@@ -51,17 +70,22 @@ namespace EulerODESolving
 
         private void GetInterpolatedPlot(Chart chart, double x0, double y0, double xn, double accuracy, int equationNumber)
         {
-            EulerSolver.Solve(equations[equationNumber], x0, y0, xn, accuracy, out double[] x, out double[] y);
+            EulerSolver.Solve(_equations[equationNumber].Equation, x0, y0, xn, accuracy, out double[] x, out double[] y);
 
             this.Spl.FitParametric(x, y, 1000, out double[] xs, out double[] ys);
-            
+
+            var yy = new double[x.Length];
+            for (int i = 0; i < x.Length; i++)
+            {
+                yy[i] = _equations[equationNumber].CauchySolution(x0, y0)(x[i]);
+            }
             //Plot
-            PlotEulerSolution(chart, "Euler ODE Solving", xs, ys);
+            PlotEulerSolution(chart, "Euler ODE Solving", xs, ys, x, yy);
         }
 
         #region PlotSplineSolution
 
-        private static Chart PlotEulerSolution(Chart chart, string title, double[] xs, double[] ys)
+        private static Chart PlotEulerSolution(Chart chart, string title, double[] xs, double[] ys, double[] x, double[] yy)
         {
             chart.Titles.Add(title);
             chart.Legends.Add(new Legend("Legend"));
@@ -74,7 +98,9 @@ namespace EulerODESolving
             chart.ChartAreas[0].AxisX.Crossing = 0;
             chart.ChartAreas[0].AxisY.Crossing = 0;
             Series s1 = CreateSeries(chart, "EulerSolve", CreateDataPoints(xs, ys), SeriesChartType.Line, Color.Blue, MarkerStyle.None);
+            Series s2 = CreateSeries(chart, "Solve", CreateDataPoints(x, yy), SeriesChartType.Line, Color.Green, MarkerStyle.None);
             chart.Series.Add(s1);
+            chart.Series.Add(s2);
 
             ca.RecalculateAxesScale();
             ca.AxisX.Minimum = Math.Floor(ca.AxisX.Minimum);
@@ -163,7 +189,7 @@ namespace EulerODESolving
             chart1.Series.Clear();
             chart1.Titles.Clear();
             error_label.Text = "";
-            double x0 = -10, y0 = 1, xn = 10, accuracy = 0.01;
+            double x0 = -10, y0 = 1, xn = 10, accuracy = 0.1;
             if(sender is null && e is null)
             {
                 x0_textBox.Text = "-10";
