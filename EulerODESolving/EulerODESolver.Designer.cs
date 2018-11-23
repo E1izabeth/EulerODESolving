@@ -77,7 +77,7 @@
             this.listBox1.Items.AddRange(new object[] {
             "y\' - x^2 + 2y = 0",
             "y\' - y * sin(x) / 6",
-            "y\' -  y * sin(y) + x * x * cos(x)"});
+            "y\' - y * e^(-x)"});
             this.listBox1.Location = new System.Drawing.Point(629, 12);
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(193, 251);
