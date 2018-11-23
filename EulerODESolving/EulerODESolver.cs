@@ -79,8 +79,9 @@ namespace EulerODESolving
             {
                 yy[i] = _equations[equationNumber].CauchySolution(x0, y0)(x[i]);
             }
+            this.Spl.FitParametric(x, yy, 1000, out double[] xOrig, out double[] yOrig);
             //Plot
-            PlotEulerSolution(chart, "Euler ODE Solving", xs, ys, x, yy);
+            PlotEulerSolution(chart, "Euler ODE Solving", xs, ys, xOrig, yOrig);
         }
 
         #region PlotSplineSolution
@@ -189,13 +190,13 @@ namespace EulerODESolving
             chart1.Series.Clear();
             chart1.Titles.Clear();
             error_label.Text = "";
-            double x0 = -10, y0 = 1, xn = 10, accuracy = 0.1;
+            double x0 = -10, y0 = 1, xn = 10, accuracy = 0.5;
             if(sender is null && e is null)
             {
-                x0_textBox.Text = "-10";
+                x0_textBox.Text = "0";
                 y0_textBox.Text = "1";
-                end_textBox.Text = "10";
-                accuracy_textBox.Text = "0,1";
+                end_textBox.Text = "3";
+                accuracy_textBox.Text = "0,5";
             }
             
             if (this.isParamsCorrect(ref x0, ref y0, ref xn, ref accuracy))
